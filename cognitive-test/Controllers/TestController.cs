@@ -187,9 +187,12 @@ namespace cognitive_test.Controllers
                 temp.visionResult = await response.Content.ReadAsStringAsync();                
                 viewModel.Add(temp);
 
-                //insert results to sql db ★document dbに移行予定
+                //insert results to document db
+                await DocumentDBRepository.CreateItemAsync(JObject.Parse(temp.visionResult));
+                
+                //※↓↓In case of inserting to SQL DB
                 //dataAccessClient.RegisterData(temp.userId, temp.photoId, temp.visionResult);
-                await DocumentDBRepository.CreateItemAsync(temp.visionResult);
+
             }
 
             //Set Params for view

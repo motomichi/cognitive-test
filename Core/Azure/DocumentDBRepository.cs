@@ -1,5 +1,6 @@
 ﻿using Microsoft.Azure.Documents;
 using Microsoft.Azure.Documents.Client;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Configuration;
 using System.Threading.Tasks;
@@ -21,8 +22,6 @@ namespace Core.Azure
         public static void Initialize()
         {
             client = new DocumentClient(new Uri(ConfigurationManager.AppSettings["endpoint"]), ConfigurationManager.AppSettings["authKey"]);
-            CreateDatabaseIfNotExistsAsync().Wait();
-            CreateCollectionIfNotExistsAsync().Wait();
         }
         #endregion
 
@@ -103,7 +102,7 @@ namespace Core.Azure
         //#endregion
 
         #region CreateItemAsync
-        public static async Task<Document> CreateItemAsync(string item)
+        public static async Task<Document> CreateItemAsync(JObject item)
         {
             return await client.CreateDocumentAsync(UriFactory.CreateDocumentCollectionUri(DatabaseId, CollectionId), item);
         }

@@ -1,0 +1,44 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="~/Content/buttons.css" />
+    <link rel="stylesheet" href="~/Content/bootstrap.css" />
+    <script src="~/Scripts/jquery-1.10.2.js"></script>
+    <script src="~/Scripts/buttons.js"></script>
+    <script src="~/Scripts/bootstrap.js"></script>
+    <title>@ViewBag.Title</title>
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+</head>
+<body>
+    
+    <div class="container body-content">
+        <nav class="navbar navbar-inverse">
+            <div class="container-fluid">
+                <div class="navbar-header">
+                    <a class="navbar-brand" href="/">Demo</a>
+                </div>
+                <ul class="nav navbar-nav">
+                    <li class="@ViewBag.HomeActive">@Html.ActionLink("Home", "Index", "Top")</li>
+                    <li class="@ViewBag.FBActive">@Html.ActionLink("Facebook", "Index", "Test", null,null)</li>
+                </ul>
+            </div>
+        </nav>
+        <hr class="style-one" />
+        @RenderBody()
+        <hr class="style-one" /> 
+    </div>    
+    <footer class="footer">
+        <div class="container">
+            <p class="text-muted">cognitive Demo .all rights reserved example</p>
+        </div>
+    </footer>
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @RenderSection("scripts", required: false)
+</body>
+</html>

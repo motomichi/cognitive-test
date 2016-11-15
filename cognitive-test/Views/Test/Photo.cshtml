@@ -1,0 +1,70 @@
+﻿@model List<FacebookAPIModel.Album>
+@{
+    int albumCoount = 0;
+    int photoCount = 0;
+    int listCount = 0;
+    var tempList = new List<string>();
+    var constId = "menu";
+
+    foreach (var item in Model)
+    {
+        tempList.Add(constId + listCount.ToString());
+        listCount++;
+    }
+}
+<script src="/Scripts/display.js"></script>
+<blockquote style="display:block">
+
+    @ViewBag.userName さんの写真一覧
+    <br />
+    @Html.ActionLink("Test Cognitive", "Analysis", "Test", null, new { @class = "button button-3d-primary button-rounded" })
+</blockquote>
+
+@if (Model.Count > 0)
+{
+    <ul class="nav nav-tabs">
+
+        @foreach (var item in Model)
+        {
+            <li><a href="#@tempList[albumCoount].ToString()" data-toggle="tab">@item.albumName</a></li>
+            albumCoount++;
+        }
+    </ul>
+}
+@if (Model.Count > 0)
+{
+    <div class="tab-content">
+        @foreach (var item in Model)
+        {
+            <div class="tab-pane fade" id="@tempList[photoCount].ToString()">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Image</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var i in item.photo)
+                        {
+                            <tr>
+                                <td>@i.photoId</td>
+                                <td><img src="@i.source.First()" class="img-thumbnail img-responsive" /></td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+            photoCount++;
+        }
+    </div>
+}
+
+
+
+
+
+
+
+
+

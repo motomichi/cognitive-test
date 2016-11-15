@@ -1,0 +1,39 @@
+﻿@model List<FacebookAPIModel.Analysis>
+@{
+
+}
+<script src="/Scripts/display.js"></script>
+<blockquote style="display:block">
+
+    @ViewBag.userName さんの写真 解析結果
+
+</blockquote>
+
+<div class="table-responsive">
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Image</th>
+                <th>Cognitive Responce</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.photoId</td>
+                <td><img src="@item.source" class="img-thumbnail img-responsive" /></td>
+                <td>@item.visionResult</td>
+            </tr>
+            }
+        </tbody>
+    </table>
+    </div>
+
+
+
+
+
+
+

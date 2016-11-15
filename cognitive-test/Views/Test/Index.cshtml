@@ -1,0 +1,19 @@
+﻿@model FacebookAPIModel.UserInfo
+@{
+       
+}
+    <blockquote>
+        <p>
+            こんにちは @ViewBag.userName さん <img src="@ViewBag.ImageUri" />
+        </p>
+        <small>Got user info from FB using Access Token</small>
+    </blockquote>
+
+    <div class="row">
+        <div class="col-lg-4 callout">
+            <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
+            <p><small>Informations that concerns about facabook-account are retrived with facebook Graph API.</small> </p>
+            @Html.ActionLink("Get Photos", "Photo", "Test", null, new { @class = "button button-circle button-primary" })
+        </div><!-- col-lg-4 -->
+    </div><!-- row -->
+    

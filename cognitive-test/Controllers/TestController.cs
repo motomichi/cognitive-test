@@ -170,7 +170,7 @@ namespace cognitive_test.Controllers
 
                 // Request parameters
                 // ★visualFeaturesに欲しい解析内容を指定
-                queryString["visualFeatures"] = "Categories,Tags,Adult,Description,ImageType,Color";
+                queryString["visualFeatures"] = "Categories,Tags,Adult,Description,ImageType,Color,Faces";
                 queryString["details"] = "Celebrities";
                 var uri = "https://api.projectoxford.ai/vision/v1.0/analyze?" + queryString;
 

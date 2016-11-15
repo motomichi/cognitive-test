@@ -168,8 +168,8 @@
     <Content Include="Content\Site.css" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
-    <None Include="Properties\PublishProfiles\cognitive-test - Web Deploy %282%29.pubxml" />
-    <None Include="Properties\PublishProfiles\cognitive-test - Web Deploy.pubxml" />
+    <None Include="Properties\PublishProfiles\cognitiveWeb - FTP.pubxml" />
+    <None Include="Properties\PublishProfiles\cognitiveWeb - Web Deploy.pubxml" />
     <None Include="Properties\PublishProfiles\testpackage.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\buttons.js" />

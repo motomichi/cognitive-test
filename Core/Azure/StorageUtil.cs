@@ -8,6 +8,9 @@ using System.IO;
 
 namespace Core.Azure
 {
+    /// <summary>
+    /// A Class for treating Azure Storage Blob
+    /// </summary>
     public class StorageUtil
     {
         #region member
@@ -18,7 +21,7 @@ namespace Core.Azure
         #region constructor
         public StorageUtil()
         {
-            this.storageAccount = CloudStorageAccount.Parse(ConfigurationManager.AppSettings["StorageConnectionString"]);            
+            storageAccount = CloudStorageAccount.Parse(ConfigurationManager.AppSettings["StorageConnectionString"]);            
         }
         #endregion
 

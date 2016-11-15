@@ -3,7 +3,10 @@ using System.Data.SqlClient;
 
 namespace Core.Azure
 {
-    public class DataAccess
+    /// <summary>
+    /// A Class for treating SQL Database
+    /// </summary>
+    public class SQLDatabaseAccess
     {
         #region RegisterData
         public bool RegisterData(string user_id, string image_id, string json)

@@ -7,6 +7,7 @@ using Newtonsoft.Json.Linq;
 using FacebookAPIModel;
 using System.Configuration;
 using System.Net.Http.Headers;
+using Core.Azure;
 
 namespace cognitive_test.Controllers
 {
@@ -67,7 +68,7 @@ namespace cognitive_test.Controllers
             var viewModel = new List<Album>();
 
             //Create a StorageUtil Instance
-            var storageUtilClient = new Core.Azure.StorageUtil();
+            var storageUtilClient = new StorageUtil();
 
             using (HttpClient client = new HttpClient())
             {
@@ -133,8 +134,8 @@ namespace cognitive_test.Controllers
             var viewModel = new List<Analysis>();
 
             //Create a StorageUtil Class Instance
-            var storageUtilClient = new Core.Azure.StorageUtil();
-            var dataAccessClient = new Core.Azure.DataAccess();
+            var storageUtilClient = new StorageUtil();
+            DocumentDBRepository.Initialize();
 
             //Facebook get fundamental information using【/me?～】
             using (HttpClient httpclient = new HttpClient())
@@ -185,9 +186,10 @@ namespace cognitive_test.Controllers
 
                 temp.visionResult = await response.Content.ReadAsStringAsync();                
                 viewModel.Add(temp);
-                
+
                 //insert results to sql db ★document dbに移行予定
-                dataAccessClient.RegisterData(temp.userId, temp.photoId, temp.visionResult);
+                //dataAccessClient.RegisterData(temp.userId, temp.photoId, temp.visionResult);
+                await DocumentDBRepository.CreateItemAsync(temp.visionResult);
             }
 
             //Set Params for view

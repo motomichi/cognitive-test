@@ -1,4 +1,8 @@
 ﻿/* common */
+p {
+    margin-bottom:20px;
+}
+
 .relative {
     position: relative;
 }

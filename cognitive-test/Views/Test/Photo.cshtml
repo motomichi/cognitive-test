@@ -12,14 +12,31 @@
         listCount++;
     }
 }
+<link rel="stylesheet" href="~/Content/reset.css" />
+<link rel="stylesheet" href="~/Content/style.css" />
 <script src="/Scripts/display.js"></script>
+<nav>
+    <ol class="cd-multi-steps text-top">
+        <li class="visited">
+            <a href="#0">Start</a>
+        </li>
+        <li class="current">
+            <a href="#0">Facebook</a>
+        </li>
+        <li>
+            <em>Cognitive</em>
+        </li>
+        <li>
+            <em>Review</em>
+        </li>
+    </ol>
+</nav>
 <blockquote style="display:block">
-
-    @ViewBag.userName さんの写真一覧
-    <br />
-    @Html.ActionLink("Test Cognitive", "Analysis", "Test", null, new { @class = "button button-3d-primary button-rounded" })
+    @ViewBag.userName さんのアルバム
+    <br /><br />
+    @Html.ActionLink("取得した画像を解析する", "Analysis", "Test", null, new { @class = "button button-3d-primary button-rounded" })
 </blockquote>
-
+<br /><br />
 @if (Model.Count > 0)
 {
     <ul class="nav nav-tabs">

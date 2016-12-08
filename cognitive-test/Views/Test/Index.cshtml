@@ -2,18 +2,38 @@
 @{
        
 }
-    <blockquote>
+<link rel="stylesheet" href="~/Content/reset.css" />
+<link rel="stylesheet" href="~/Content/style.css" />
+<nav>
+    <ol class="cd-multi-steps text-top">
+        <li class="current">
+            <em>Start</em>
+        </li>
+        <li>
+            <em>Facebook</em>
+        </li>
+        <li>
+            <em>Cognitive</em>
+        </li>
+        <li>
+            <em>Review</em>
+        </li>
+    </ol>
+</nav>
+<div id="main">
+    <div class="relative" style="padding:10px;">
+        <blockquote>
+            <p>
+                こんにちは @ViewBag.userName さん
+                <img src="@ViewBag.ImageUri" />
+            </p>
+        </blockquote>
         <p>
-            こんにちは @ViewBag.userName さん <img src="@ViewBag.ImageUri" />
+            <small>
+                これより、Facebookからアルバム内の画像を取得します。
+                <br />取得後、Cognitive Services Vision APIを利用した画像解析を実施します。
+            </small>
         </p>
-        <small>Got user info from FB using Access Token</small>
-    </blockquote>
-
-    <div class="row">
-        <div class="col-lg-4 callout">
-            <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
-            <p><small>Informations that concerns about facabook-account are retrived with facebook Graph API.</small> </p>
-            @Html.ActionLink("Get Photos", "Photo", "Test", null, new { @class = "button button-circle button-primary" })
-        </div><!-- col-lg-4 -->
-    </div><!-- row -->
-    
+        <br />@Html.ActionLink("Facebookアカウントから画像を取得する", "Photo", "Test", null, new { @class = "button button-3d-primary button-rounded" })
+    </div>
+</div>

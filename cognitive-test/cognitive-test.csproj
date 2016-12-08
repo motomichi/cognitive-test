@@ -170,6 +170,8 @@
     <Content Include="Content\img\sea_1.jpg" />
     <Content Include="Content\img\sgf01a201308282000.jpg" />
     <Content Include="Content\layout.css" />
+    <Content Include="Content\reset.css" />
+    <Content Include="Content\style.css" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />

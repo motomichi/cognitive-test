@@ -164,11 +164,14 @@
     <Content Include="Content\buttons.css" />
     <Content Include="Content\img\3D-Facebook-Icon-psd62926.png" />
     <Content Include="Content\img\cognitive-services.png" />
+    <Content Include="Content\img\facebook-graph-api-572x150.jpg" />
     <Content Include="Content\img\mono.jpg" />
     <Content Include="Content\img\mountain_1.jpg" />
     <Content Include="Content\img\readtext.png" />
     <Content Include="Content\img\sea_1.jpg" />
     <Content Include="Content\img\sgf01a201308282000.jpg" />
+    <Content Include="Content\img\test2_12.jpg" />
+    <Content Include="Content\img\test2_9_2.jpg" />
     <Content Include="Content\layout.css" />
     <Content Include="Content\reset.css" />
     <Content Include="Content\style.css" />

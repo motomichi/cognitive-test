@@ -184,11 +184,15 @@ namespace cognitive_test.Controllers
                     response = await client.PostAsync(uri, content);
                 }
 
-                temp.visionResult = await response.Content.ReadAsStringAsync();                
+                temp.visionResult = await response.Content.ReadAsStringAsync();
                 viewModel.Add(temp);
 
+                var jsonResult = JObject.Parse(temp.visionResult);
+                jsonResult["userId"] = userModel.id;
+                jsonResult["id"] = userModel.id + "-" + temp.albumId + "-" + temp.photoId.Remove(temp.photoId.IndexOf("."));
+
                 //insert results to document db
-                await DocumentDBRepository.CreateItemAsync(JObject.Parse(temp.visionResult));
+                await DocumentDBRepository.CreateItemAsync(jsonResult);
                 
                 //※↓↓In case of inserting to SQL DB
                 //dataAccessClient.RegisterData(temp.userId, temp.photoId, temp.visionResult);

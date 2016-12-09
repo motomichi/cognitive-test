@@ -104,7 +104,15 @@ namespace Core.Azure
         #region CreateItemAsync
         public static async Task<Document> CreateItemAsync(JObject item)
         {
-            return await client.CreateDocumentAsync(UriFactory.CreateDocumentCollectionUri(DatabaseId, CollectionId), item);
+            try
+            {
+                return await client.CreateDocumentAsync(UriFactory.CreateDocumentCollectionUri(DatabaseId, CollectionId), item);
+            }            
+            catch(Exception)
+            {
+                //Ignore Server Error include duplicate key etc
+                return null;
+            }
         }
         #endregion
 

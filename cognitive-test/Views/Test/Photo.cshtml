@@ -21,61 +21,63 @@
             <a href="#0">Start</a>
         </li>
         <li class="current">
-            <a href="#0">Facebook</a>
+            <a href="#0">Facebook Image</a>
         </li>
         <li>
-            <em>Cognitive</em>
+            <em>Cognitive Vision API</em>
         </li>
         <li>
-            <em>Review</em>
+            <em>Recommend</em>
         </li>
     </ol>
 </nav>
-<blockquote style="display:block">
-    @ViewBag.userName さんのアルバム
+<div id="main" style="height:100px;padding:10px;">
+    <blockquote style="display:block">
+        @ViewBag.userName さんのアルバム
+        <br /><br />
+        @Html.ActionLink("取得した画像を解析する", "Analysis", "Test", null, new { @class = "button button-3d-primary button-rounded" })
+    </blockquote>
+</div>
     <br /><br />
-    @Html.ActionLink("取得した画像を解析する", "Analysis", "Test", null, new { @class = "button button-3d-primary button-rounded" })
-</blockquote>
-<br /><br />
-@if (Model.Count > 0)
-{
-    <ul class="nav nav-tabs">
+    @if (Model.Count > 0)
+    {
+        <ul class="nav nav-tabs">
 
-        @foreach (var item in Model)
-        {
-            <li><a href="#@tempList[albumCoount].ToString()" data-toggle="tab">@item.albumName</a></li>
-            albumCoount++;
-        }
-    </ul>
-}
-@if (Model.Count > 0)
-{
-    <div class="tab-content">
-        @foreach (var item in Model)
-        {
-            <div class="tab-pane fade" id="@tempList[photoCount].ToString()">
-                <table class="table table-striped">
-                    <thead>
-                        <tr>
-                            <th>ID</th>
-                            <th>Image</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach (var i in item.photo)
-                        {
+            @foreach (var item in Model)
+            {
+                <li><a href="#@tempList[albumCoount].ToString()" data-toggle="tab">@item.albumName</a></li>
+                albumCoount++;
+            }
+        </ul>
+    }
+    @if (Model.Count > 0)
+    {
+        <div class="tab-content">
+            @foreach (var item in Model)
+            {
+                <div class="tab-pane fade" id="@tempList[photoCount].ToString()">
+                    <table class="table table-striped">
+                        <thead>
                             <tr>
-                                <td>@i.photoId</td>
-                                <td><img src="@i.source.First()" class="img-thumbnail img-responsive" /></td>
+                                <th>ID</th>
+                                <th>Image</th>
                             </tr>
-                        }
-                    </tbody>
-                </table>
-            </div>
-            photoCount++;
-        }
-    </div>
-}
+                        </thead>
+                        <tbody>
+                            @foreach (var i in item.photo)
+                            {
+                                <tr>
+                                    <td>@i.photoId</td>
+                                    <td><img src="@i.source.First()" class="img-thumbnail img-responsive" /></td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+                photoCount++;
+            }
+        </div>
+    }
 
 
 

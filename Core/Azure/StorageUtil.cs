@@ -88,6 +88,11 @@ namespace Core.Azure
                 // Create the container if it doesn't already exist.
                 container.CreateIfNotExists();
 
+                // Set Permission
+                BlobContainerPermissions permissions = container.GetPermissions();
+                permissions.PublicAccess = BlobContainerPublicAccessType.Container;
+                container.SetPermissions(permissions);
+
                 // Retrieve reference to a blob named photo id.
                 CloudBlockBlob blockBlob = container.GetBlockBlobReference(blobName);                
 

@@ -202,6 +202,14 @@ namespace cognitive_test.Controllers
         }
         #endregion
 
+        #region Test Recommend 【画像分析】
+        public ActionResult Recommend()
+        {
+            
+            return View();
+        }
+        #endregion
+
         #region private 【アクセストークン取得】
         /// <summary>
         /// アクセストークン取得

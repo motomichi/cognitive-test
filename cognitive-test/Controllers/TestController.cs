@@ -37,7 +37,7 @@ namespace cognitive_test.Controllers
                 {
                     var o = JObject.Parse(await response.Content.ReadAsStringAsync());
                     userModel.name = o["name"].ToString();
-                    userModel.id = o["id"].ToString();                    
+                    userModel.id = o["id"].ToString();
                 }
                 //Facebook get profile image using 【/me/picture?～】
                 using (HttpResponseMessage response = await client.GetAsync("https://graph.facebook.com/me" + "/picture?redirect=false&access_token=" + accessToken))
@@ -187,6 +187,7 @@ namespace cognitive_test.Controllers
                 temp.visionResult = await response.Content.ReadAsStringAsync();
                 viewModel.Add(temp);
 
+                //add "userId" and "id" to json 
                 var jsonResult = JObject.Parse(temp.visionResult);
                 jsonResult["userId"] = userModel.id;
                 jsonResult["id"] = userModel.id + "-" + temp.albumId + "-" + temp.photoId.Remove(temp.photoId.IndexOf("."));

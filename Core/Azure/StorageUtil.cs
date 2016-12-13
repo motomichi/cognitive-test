@@ -21,12 +21,12 @@ namespace Core.Azure
         #region constructor
         public StorageUtil()
         {
-            storageAccount = CloudStorageAccount.Parse(ConfigurationManager.AppSettings["StorageConnectionString"]);            
+            storageAccount = CloudStorageAccount.Parse(ConfigurationManager.AppSettings["StorageConnectionString"]);
         }
         #endregion
 
         #region UploadBlob
-        public Boolean UploadBlob(string userId,string albumId, string photoId, string source)
+        public Boolean UploadBlob(string userId, string albumId, string photoId, string source)
         {
             //Log start
             System.Diagnostics.Trace.TraceInformation("UploadBlob：start");
@@ -94,7 +94,7 @@ namespace Core.Azure
                 container.SetPermissions(permissions);
 
                 // Retrieve reference to a blob named photo id.
-                CloudBlockBlob blockBlob = container.GetBlockBlobReference(blobName);                
+                CloudBlockBlob blockBlob = container.GetBlockBlobReference(blobName);
 
                 //Upload to blob
                 blockBlob.Properties.ContentType = response.ContentType;
@@ -118,31 +118,31 @@ namespace Core.Azure
         #endregion
 
         #region DownloadBlob(From Container)
-        public List<KeyValuePair<string,string>> DownloadBlob(string containerName)
+        public List<KeyValuePair<string, string>> DownloadBlob(string containerName)
         {
             //Log start
             System.Diagnostics.Trace.TraceInformation("DonwloadBlob(From Container)：start");
             var result = new List<KeyValuePair<string, string>>();
-            
-                //Create storage client.
-                CloudStorageAccount storageAccount = CloudStorageAccount.Parse(ConfigurationManager.AppSettings["StorageConnectionString"]);
 
-                // Create the blob client.
-                CloudBlobClient blobClient = storageAccount.CreateCloudBlobClient();
-                
-                // Retrieve reference to a previously created container.
-                System.Diagnostics.Trace.TraceInformation("DonwloadBlob(From Container)containerName：" + containerName);
-                CloudBlobContainer container = blobClient.GetContainerReference(containerName);
+            //Create storage client.
+            CloudStorageAccount storageAccount = CloudStorageAccount.Parse(ConfigurationManager.AppSettings["StorageConnectionString"]);
 
-                // Loop over items within the container and output the Name.
-                foreach (IListBlobItem item in container.ListBlobs(null, true))
-                {                          
-                    CloudBlockBlob blob = (CloudBlockBlob)item;
-                    System.Diagnostics.Trace.TraceInformation("DonwloadBlob(From Container)blob.Name：" + blob.Name);
-                    System.Diagnostics.Trace.TraceInformation("DonwloadBlob(From Container)blob.Uri.ToString()：" + blob.Uri.ToString());
-                    var temp = new KeyValuePair<string, string>(blob.Name, blob.Uri.ToString());                    
-                    result.Add(temp); 
-                }            
+            // Create the blob client.
+            CloudBlobClient blobClient = storageAccount.CreateCloudBlobClient();
+
+            // Retrieve reference to a previously created container.
+            System.Diagnostics.Trace.TraceInformation("DonwloadBlob(From Container)containerName：" + containerName);
+            CloudBlobContainer container = blobClient.GetContainerReference(containerName);
+
+            // Loop over items within the container and output the Name.
+            foreach (IListBlobItem item in container.ListBlobs(null, true))
+            {
+                CloudBlockBlob blob = (CloudBlockBlob)item;
+                System.Diagnostics.Trace.TraceInformation("DonwloadBlob(From Container)blob.Name：" + blob.Name);
+                System.Diagnostics.Trace.TraceInformation("DonwloadBlob(From Container)blob.Uri.ToString()：" + blob.Uri.ToString());
+                var temp = new KeyValuePair<string, string>(blob.Name, blob.Uri.ToString());
+                result.Add(temp);
+            }
 
             //Log end
             System.Diagnostics.Trace.TraceInformation("DonwloadBlob(From Container)：end");
@@ -170,20 +170,20 @@ namespace Core.Azure
 
                 // Retrieve reference to a blob named "photo1.jpg".
                 CloudBlockBlob blockBlob = container.GetBlockBlobReference(blobMame);
-               
+
                 // Save blob contents to a memory
                 using (var memoryStream = new MemoryStream())
                 {
                     System.Diagnostics.Trace.TraceInformation("DonwloadBlob：DownloadToStream");
                     blockBlob.DownloadToStream(memoryStream);
-                    
+
                     byte[] byteData = memoryStream.ToArray();
 
                     //memoryStream.Read(byteData, 0, byteData.Length);
                     System.Diagnostics.Trace.TraceInformation("DonwloadBlob：byteData：" + byteData.ToString());
 
                     result = byteData;
-                }                                
+                }
             }
             catch
             {

@@ -16,18 +16,18 @@ namespace cognitive_test.Controllers
     /// </summary>
     [Authorize]
     public class TestController : Controller
-    {        
+    {
         #region const
         const string PROVIDER = "facebook";
         #endregion
-        
+
         #region Test Index 【Facebookユーザ情報表示】
         [Authorize]
         public async System.Threading.Tasks.Task<ActionResult> Index()
-        {   
-                        
+        {
+
             //Get Access Token
-            string accessToken = GetAccessToken(PROVIDER);            
+            string accessToken = GetAccessToken(PROVIDER);
             UserInfo userModel = new UserInfo();
 
             using (HttpClient client = new HttpClient())
@@ -46,12 +46,11 @@ namespace cognitive_test.Controllers
                     userModel.ImageUri = x["data"]["url"].ToString();
                 }
             }
-            
+
             //Set Params for view
             @ViewBag.userName = userModel.name;
             @ViewBag.ImageUri = userModel.ImageUri;
             @ViewBag.Title = "Facebook Information";
-            @ViewBag.FBActive = "active";
 
             return View(userModel);
         }
@@ -64,7 +63,7 @@ namespace cognitive_test.Controllers
             string accessToken = GetAccessToken(PROVIDER);
 
             //Prepare Model used in view
-            var userModel = new UserInfo();            
+            var userModel = new UserInfo();
             var viewModel = new List<Album>();
 
             //Create a StorageUtil Instance
@@ -94,12 +93,12 @@ namespace cognitive_test.Controllers
                     {
                         if (!(album["name"].ToString().Equals("Profile Pictures")) && (!album["name"].ToString().Equals("Timeline Photos")))
                         {
-                            var albumtemp = new Album() { albumId = album["id"].ToString(),albumName = album["name"].ToString(), photo = new List<Photo>() };
+                            var albumtemp = new Album() { albumId = album["id"].ToString(), albumName = album["name"].ToString(), photo = new List<Photo>() };
 
                             //Facebook get photos in each albums using【/[album_id]/photos?fields=images～】
                             using (HttpResponseMessage responsephoto = await client.GetAsync("https://graph.facebook.com/" + album["id"].ToString() + "/photos?fields=images&access_token=" + accessToken))
                             {
-                                
+
                                 var phpotoList = JObject.Parse(await responsephoto.Content.ReadAsStringAsync());
                                 System.Diagnostics.Trace.TraceInformation(phpotoList.ToString());
                                 foreach (JToken photo in phpotoList["data"].Children())
@@ -107,7 +106,7 @@ namespace cognitive_test.Controllers
                                     var phototemp = new Photo { photoId = photo["id"].ToString(), source = new List<string>() };
                                     phototemp.source.Add(photo["images"].Children().First()["source"].ToString());
 
-                                    albumtemp.photo.Add(phototemp);                                    
+                                    albumtemp.photo.Add(phototemp);
 
                                     //Upload photo into Azure blob
                                     storageUtilClient.UploadBlob(userModel.id, albumtemp.albumId, phototemp.photoId, photo["images"].Children().First()["source"].ToString());
@@ -115,20 +114,20 @@ namespace cognitive_test.Controllers
                             }
                             viewModel.Add(albumtemp);
                         }
-                        
+
                         count++;
                         //waiting 1 sec every time 10 tran excuted.
-                        if(count % 10 == 0)
+                        if (count % 10 == 0)
                         {
                             System.Threading.Thread.Sleep(1000);
                         }
-                    }                    
+                    }
                 }
             }
 
             //Set Params for view
             @ViewBag.userName = userModel.name;
-            @ViewBag.FBActive = "active";
+            @ViewBag.Title = "写真一覧";
 
             return View(viewModel);
         }
@@ -139,7 +138,7 @@ namespace cognitive_test.Controllers
         {
             //Get Access Token
             string accessToken = GetAccessToken(PROVIDER);
-            
+
             //Prepare Model used in view
             var userModel = new UserInfo();
             var viewModel = new List<Analysis>();
@@ -150,7 +149,7 @@ namespace cognitive_test.Controllers
 
             //Facebook get fundamental information using【/me?～】
             using (HttpClient httpclient = new HttpClient())
-            {                
+            {
                 using (HttpResponseMessage responseUser = await httpclient.GetAsync("https://graph.facebook.com/me" + "?access_token=" + accessToken))
                 {
                     var userInfo = JObject.Parse(await responseUser.Content.ReadAsStringAsync());
@@ -164,7 +163,7 @@ namespace cognitive_test.Controllers
 
             //Try to Cognitive Services
             foreach (KeyValuePair<string, string> i in imageList)
-            {                
+            {
                 //Get Album & Photo ID
                 var albumId = i.Key.Split('/')[0];
                 var photoId = i.Key.Split('/')[1];
@@ -205,7 +204,7 @@ namespace cognitive_test.Controllers
 
                 //insert results to document db
                 await DocumentDBRepository.CreateItemAsync(jsonResult);
-                
+
                 //※↓↓In case of inserting to SQL DB
                 //dataAccessClient.RegisterData(temp.userId, temp.photoId, temp.visionResult);
 
@@ -213,7 +212,7 @@ namespace cognitive_test.Controllers
 
             //Set Params for view
             @ViewBag.userName = userModel.name;
-            @ViewBag.FBActive = "active";
+            @ViewBag.Title = "Cognitive Services API 取得結果";
             return View(viewModel);
         }
         #endregion
@@ -240,7 +239,9 @@ namespace cognitive_test.Controllers
             var result = DocumentDBRepository.GetData(userModel.id);
             System.Diagnostics.Trace.TraceInformation("select result count：" + result.Count);
             System.Diagnostics.Trace.TraceInformation("select result：" + string.Join(",", result));
-            
+
+            @ViewBag.Title = "解析例";
+
             return View();
         }
         #endregion
@@ -252,7 +253,7 @@ namespace cognitive_test.Controllers
         /// <param name="provider">認証プロバイダー</param>
         /// <returns></returns>
         private string GetAccessToken(string provider)
-        {            
+        {
             /* アクセストークン取得 */
             return Request.Headers.GetValues("X-MS-TOKEN-FACEBOOK-ACCESS-TOKEN").FirstOrDefault();
         }

@@ -7,9 +7,8 @@ namespace cognitive_test.Controllers
         // GET: Top
         [AllowAnonymous]
         public ActionResult Index()
-        {
-            @ViewBag.HomeActive = "active";
-            @ViewBag.Title = "top";
+        {            
+            @ViewBag.Title = "TOP";
             return View();
         }
     }

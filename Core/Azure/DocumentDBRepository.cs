@@ -2,7 +2,9 @@
 using Microsoft.Azure.Documents.Client;
 using Newtonsoft.Json.Linq;
 using System;
+using System.Collections.Generic;
 using System.Configuration;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Core.Azure
@@ -113,6 +115,32 @@ namespace Core.Azure
                 //Ignore Server Error include duplicate key etc
                 return null;
             }
+        }
+        #endregion
+
+        #region GetData
+        public static List<JObject> GetData(string userId)
+        {
+            List<JObject> result = new List<JObject>();
+            
+            try
+            {
+                // Set some common query options
+                FeedOptions queryOptions = new FeedOptions { MaxItemCount = -1 };
+                
+                // Now execute the same query via direct SQL
+                result = client.CreateDocumentQuery<JObject>(
+                        UriFactory.CreateDocumentCollectionUri(DatabaseId, CollectionId),
+                        "SELECT * FROM c WHERE c.userId = '" + userId + "'",
+                        queryOptions).ToList();
+            }
+            catch (Exception)
+            {
+                //Ignore Server Error include duplicate key etc
+                return new List<JObject>();
+            }
+
+            return result;
         }
         #endregion
 

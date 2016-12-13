@@ -86,6 +86,10 @@ namespace cognitive_test.Controllers
                     var albums = JObject.Parse(await response.Content.ReadAsStringAsync());
                     System.Diagnostics.Trace.TraceInformation("album accessToken：" + accessToken);
                     System.Diagnostics.Trace.TraceInformation("album result：" + albums.ToString());
+
+                    //Count to limit API Call(10 transaction per sec)
+                    var count = 1;
+
                     foreach (JToken album in albums["data"].Children())
                     {
                         if (!(album["name"].ToString().Equals("Profile Pictures")) && (!album["name"].ToString().Equals("Timeline Photos")))
@@ -110,6 +114,13 @@ namespace cognitive_test.Controllers
                                 }
                             }
                             viewModel.Add(albumtemp);
+                        }
+                        
+                        count++;
+                        //waiting 1 sec every time 10 tran excuted.
+                        if(count % 10 == 0)
+                        {
+                            System.Threading.Thread.Sleep(1000);
                         }
                     }                    
                 }
@@ -208,8 +219,27 @@ namespace cognitive_test.Controllers
         #endregion
 
         #region Test Recommend 【画像分析】
-        public ActionResult Recommend()
+        public async System.Threading.Tasks.Task<ActionResult> Recommend()
         {
+            //Get Access Token
+            string accessToken = GetAccessToken(PROVIDER);
+            UserInfo userModel = new UserInfo();
+
+            using (HttpClient client = new HttpClient())
+            {
+                //Facebook get fundamental information using【/me?～】
+                using (HttpResponseMessage response = await client.GetAsync("https://graph.facebook.com/me" + "?access_token=" + accessToken))
+                {
+                    var o = JObject.Parse(await response.Content.ReadAsStringAsync());
+                    userModel.name = o["name"].ToString();
+                    userModel.id = o["id"].ToString();
+                }
+            }
+
+            //Get Collection                       
+            var result = DocumentDBRepository.GetData(userModel.id);
+            System.Diagnostics.Trace.TraceInformation("select result count：" + result.Count);
+            System.Diagnostics.Trace.TraceInformation("select result：" + string.Join(",", result));
             
             return View();
         }

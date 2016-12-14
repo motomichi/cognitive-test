@@ -240,7 +240,7 @@ namespace cognitive_test.Controllers
             System.Diagnostics.Trace.TraceInformation("select result count：" + result.Count);
 
             //Set Params for view
-            ViewBag.Title = "解析例";
+            ViewBag.Title = "集計";
 
             return View(AggregateData(result));
         }

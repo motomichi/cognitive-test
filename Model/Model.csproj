@@ -40,7 +40,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="photo.cs" />
+    <Compile Include="Aggregate.cs" />
+    <Compile Include="Analysis.cs" />
+    <Compile Include="Photo.cs" />
     <Compile Include="UserInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

@@ -214,7 +214,7 @@
     <Content Include="Views\Test\Photo.cshtml" />
     <Content Include="Views\Test\Analysis.cshtml" />
     <Content Include="Views\Top\Index.cshtml" />
-    <Content Include="Views\Test\Recommend.cshtml" />
+    <Content Include="Views\Test\Aggregate.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -233,9 +233,9 @@
       <Project>{3e9b6a32-6598-4245-b1a3-b01a91ad9cf7}</Project>
       <Name>Core</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Model\FacebookAPIModel.csproj">
+    <ProjectReference Include="..\Model\Model.csproj">
       <Project>{e44703d0-e2ac-47dc-85f2-29e417121d04}</Project>
-      <Name>FacebookAPIModel</Name>
+      <Name>Model</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

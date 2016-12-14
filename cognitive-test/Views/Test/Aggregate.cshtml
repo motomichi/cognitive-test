@@ -1,4 +1,4 @@
-﻿@model List<Model.Analysis>
+﻿@model List<Model.Aggregate>
 @{
 
 }
@@ -13,46 +13,38 @@
         <li class="visited">
             <a href="#0">Facebook Image</a>
         </li>
-        <li class="current">
+        <li class="visited">
             <a href="#0">Cognitive Vision API</a>
         </li>
-        <li>
-            <em>Aggregate</em>
+        <li class="current">
+            <a href="#0">Aggregate</a>
         </li>
     </ol>
 </nav>
-<blockquote style="display:block">
+<div id="main" style="height:50px;padding:15px;">
+    <blockquote style="display:block">
 
-    @ViewBag.userName さんの写真 <br />Cognitive Services Computer Vision API 呼び出し結果
-    <br /><br />
-    @Html.ActionLink("解析データを集計する", "Aggregate", "Test", null, new { @class = "button button-3d-primary button-rounded" })
-</blockquote>
+        Cognitive Services Computer Vision API から得られたデータの解析
+
+    </blockquote>
+</div>
 <br /><br />
 <div class="table-responsive">
     <table class="table table-striped">
         <thead>
             <tr>
-                <th>ID</th>
-                <th>Image</th>
-                <th>Result</th>
+                <th>name</th>
+                <th>count</th>
             </tr>
         </thead>
         <tbody>
             @foreach (var item in Model)
             {
                 <tr>
-                    <td>@item.photoId</td>
-                    <td><img src="@item.source" class="img-thumbnail img-responsive" /></td>
-                    <td>@item.visionResult</td>
+                    <td>@item.name</td>
+                    <td>@item.count</td>
                 </tr>
             }
         </tbody>
     </table>
 </div>
-
-
-
-
-
-
-

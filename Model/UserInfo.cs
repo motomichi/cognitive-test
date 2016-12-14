@@ -1,4 +1,4 @@
-﻿namespace FacebookAPIModel
+﻿namespace Model
 {
     public class UserInfo
     {

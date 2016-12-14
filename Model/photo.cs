@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace FacebookAPIModel
+namespace Model
 {
     public class Album
     {
@@ -14,14 +14,4 @@ namespace FacebookAPIModel
         public string photoId { get; set; }
         public List<string> source { get; set; }
     }
-
-    public class Analysis
-    {
-        public string userId { get; set; }
-        public string albumId { get; set; }
-        public string photoId { get; set; }
-        public string source { get; set; }
-        public string visionResult { get; set; }
-    }
-
 }

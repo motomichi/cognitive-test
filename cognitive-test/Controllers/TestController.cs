@@ -4,7 +4,7 @@ using System.Web;
 using System.Web.Mvc;
 using System.Net.Http;
 using Newtonsoft.Json.Linq;
-using FacebookAPIModel;
+using Model;
 using System.Configuration;
 using System.Net.Http.Headers;
 using Core.Azure;
@@ -217,8 +217,8 @@ namespace cognitive_test.Controllers
         }
         #endregion
 
-        #region Test Recommend 【画像分析】
-        public async System.Threading.Tasks.Task<ActionResult> Recommend()
+        #region Test Aggregate 【JSONデータ集計】
+        public async System.Threading.Tasks.Task<ActionResult> Aggregate()
         {
             //Get Access Token
             string accessToken = GetAccessToken(PROVIDER);
@@ -235,14 +235,14 @@ namespace cognitive_test.Controllers
                 }
             }
 
-            //Get Collection                       
+            //Get Collection
             var result = DocumentDBRepository.GetData(userModel.id);
             System.Diagnostics.Trace.TraceInformation("select result count：" + result.Count);
-            System.Diagnostics.Trace.TraceInformation("select result：" + string.Join(",", result));
 
-            @ViewBag.Title = "解析例";
+            //Set Params for view
+            ViewBag.Title = "解析例";
 
-            return View();
+            return View(AggregateData(result));
         }
         #endregion
 
@@ -256,6 +256,45 @@ namespace cognitive_test.Controllers
         {
             /* アクセストークン取得 */
             return Request.Headers.GetValues("X-MS-TOKEN-FACEBOOK-ACCESS-TOKEN").FirstOrDefault();
+        }
+        #endregion
+
+        #region private 【JSONデータ集計】        
+        private List<Aggregate> AggregateData(List<JObject> list)
+        {
+            var result = new List<Aggregate>();
+            /* "categories" */
+            foreach (JObject item in list)
+            {                
+                try
+                {
+                    foreach (JToken j in item["categories"].Children())
+                    {             
+                        // scoreが0.5以上のものを集計対象に
+
+                        if ((float)(j["score"]) > 0.5)
+                        {
+                            var temp = new Aggregate();
+                            if (!(result.Select(x => x.name).ToList().Contains(j["name"].ToString())))
+                            {
+                                temp = new Aggregate { name = j["name"].ToString(), count = 1 };
+                            }
+                            else
+                            {
+                                var currentVal = result.Where(x => x.name.Equals(j["name"].ToString())).First().count;
+                                result.RemoveAll(x => x.name.Equals(j["name"].ToString()));
+                                temp = new Aggregate { name = j["name"].ToString(), count = currentVal + 1 };
+                            }
+                            result.Add(temp);
+                        }
+                    }
+                }
+                catch
+                {
+                    //Ignore error ※item doesn't have "ctegories" element
+                }
+            }
+            return result;
         }
         #endregion
 

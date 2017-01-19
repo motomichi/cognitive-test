@@ -25,7 +25,6 @@ namespace cognitive_test.Controllers
         [Authorize]
         public async System.Threading.Tasks.Task<ActionResult> Index()
         {
-
             //Get Access Token
             string accessToken = GetAccessToken(PROVIDER);
             UserInfo userModel = new UserInfo();
@@ -104,12 +103,25 @@ namespace cognitive_test.Controllers
                                 foreach (JToken photo in phpotoList["data"].Children())
                                 {
                                     var phototemp = new Photo { photoId = photo["id"].ToString(), source = new List<string>() };
-                                    phototemp.source.Add(photo["images"].Children().First()["source"].ToString());
 
+                                    //Get minimum size data                 
+                                    var height_temp = (int)photo["images"].Children().First()["height"];
+                                    var image_temp = photo["images"].Children().First()["source"].ToString();
+                                    
+                                    foreach (JToken i in photo["images"].Children())
+                                    {
+                                        if ((int)i["height"] < height_temp)
+                                        {
+                                            height_temp = (int)i["height"];
+                                            image_temp = i["source"].ToString();
+                                        }                                        
+                                    }
+                                    
+                                    phototemp.source.Add(image_temp);
                                     albumtemp.photo.Add(phototemp);
 
                                     //Upload photo into Azure blob
-                                    storageUtilClient.UploadBlob(userModel.id, albumtemp.albumId, phototemp.photoId, photo["images"].Children().First()["source"].ToString());
+                                    storageUtilClient.UploadBlob(userModel.id, albumtemp.albumId, phototemp.photoId, image_temp);
                                 }
                             }
                             viewModel.Add(albumtemp);
@@ -238,7 +250,7 @@ namespace cognitive_test.Controllers
             //Get Collection
             var result = DocumentDBRepository.GetData(userModel.id);
             System.Diagnostics.Trace.TraceInformation("select result count：" + result.Count);
-
+            
             //Set Params for view
             ViewBag.Title = "集計";
 
@@ -259,7 +271,7 @@ namespace cognitive_test.Controllers
         }
         #endregion
 
-        #region private 【JSONデータ集計】        
+        #region private 【JSONデータ集計】(リスト)        
         private List<Aggregate> AggregateData(List<JObject> list)
         {
             var result = new List<Aggregate>();
@@ -297,6 +309,43 @@ namespace cognitive_test.Controllers
             return result;
         }
         #endregion
+
+        //#region private 【JSONデータ集計】        
+        //private List<Aggregate> AggregateData(JObject temp)
+        //{
+        //    var result = new List<Aggregate>();
+        //    /* "categories" */           
+        //        try
+        //        {
+        //            foreach (JToken j in temp["categories"].Children())
+        //            {
+        //                // scoreが0.5以上のものを集計対象に
+
+        //                if ((float)(j["score"]) > 0.5)
+        //                {
+        //                    var temp = new Aggregate();
+        //                    if (!(result.Select(x => x.name).ToList().Contains(j["name"].ToString())))
+        //                    {
+        //                        temp = new Aggregate { name = j["name"].ToString(), count = 1 };
+        //                    }
+        //                    else
+        //                    {
+        //                        var currentVal = result.Where(x => x.name.Equals(j["name"].ToString())).First().count;
+        //                        result.RemoveAll(x => x.name.Equals(j["name"].ToString()));
+        //                        temp = new Aggregate { name = j["name"].ToString(), count = currentVal + 1 };
+        //                    }
+        //                    result.Add(temp);
+        //                }
+        //            }
+        //        }
+        //        catch
+        //        {
+        //            //Ignore error ※item doesn't have "ctegories" element
+        //        }
+            
+        //    return result;
+        //}
+        //#endregion
 
     }
 

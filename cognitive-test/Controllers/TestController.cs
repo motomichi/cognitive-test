@@ -229,34 +229,36 @@ namespace cognitive_test.Controllers
         }
         #endregion
 
-        #region Test Aggregate 【JSONデータ集計】
-        public async System.Threading.Tasks.Task<ActionResult> Aggregate()
-        {
-            //Get Access Token
-            string accessToken = GetAccessToken(PROVIDER);
-            UserInfo userModel = new UserInfo();
+        #region ★未使用
 
-            using (HttpClient client = new HttpClient())
-            {
-                //Facebook get fundamental information using【/me?～】
-                using (HttpResponseMessage response = await client.GetAsync("https://graph.facebook.com/me" + "?access_token=" + accessToken))
-                {
-                    var o = JObject.Parse(await response.Content.ReadAsStringAsync());
-                    userModel.name = o["name"].ToString();
-                    userModel.id = o["id"].ToString();
-                }
-            }
+        //#region Test Aggregate 【JSONデータ集計】
+        //public async System.Threading.Tasks.Task<ActionResult> Aggregate()
+        //{
+        //    //Get Access Token
+        //    string accessToken = GetAccessToken(PROVIDER);
+        //    UserInfo userModel = new UserInfo();
 
-            //Get Collection
-            var result = DocumentDBRepository.GetData(userModel.id);
-            System.Diagnostics.Trace.TraceInformation("select result count：" + result.Count);
-            
-            //Set Params for view
-            ViewBag.Title = "集計";
+        //    using (HttpClient client = new HttpClient())
+        //    {
+        //        //Facebook get fundamental information using【/me?～】
+        //        using (HttpResponseMessage response = await client.GetAsync("https://graph.facebook.com/me" + "?access_token=" + accessToken))
+        //        {
+        //            var o = JObject.Parse(await response.Content.ReadAsStringAsync());
+        //            userModel.name = o["name"].ToString();
+        //            userModel.id = o["id"].ToString();
+        //        }
+        //    }
 
-            return View(AggregateData(result));
-        }
-        #endregion
+        //    //Get Collection
+        //    var result = DocumentDBRepository.GetData(userModel.id);
+        //    System.Diagnostics.Trace.TraceInformation("select result count：" + result.Count);
+
+        //    //Set Params for view
+        //    ViewBag.Title = "集計";
+
+        //    return View(AggregateData(result));
+        //}
+        //#endregion
 
         #region private 【アクセストークン取得】
         /// <summary>
@@ -271,44 +273,44 @@ namespace cognitive_test.Controllers
         }
         #endregion
 
-        #region private 【JSONデータ集計】(リスト)        
-        private List<Aggregate> AggregateData(List<JObject> list)
-        {
-            var result = new List<Aggregate>();
-            /* "categories" */
-            foreach (JObject item in list)
-            {                
-                try
-                {
-                    foreach (JToken j in item["categories"].Children())
-                    {             
-                        // scoreが0.5以上のものを集計対象に
+        //#region private 【JSONデータ集計】(リスト)        
+        //private List<Aggregate> AggregateData(List<JObject> list)
+        //{
+        //    var result = new List<Aggregate>();
+        //    /* "categories" */
+        //    foreach (JObject item in list)
+        //    {                
+        //        try
+        //        {
+        //            foreach (JToken j in item["categories"].Children())
+        //            {             
+        //                // scoreが0.5以上のものを集計対象に
 
-                        if ((float)(j["score"]) > 0.5)
-                        {
-                            var temp = new Aggregate();
-                            if (!(result.Select(x => x.name).ToList().Contains(j["name"].ToString())))
-                            {
-                                temp = new Aggregate { name = j["name"].ToString(), count = 1 };
-                            }
-                            else
-                            {
-                                var currentVal = result.Where(x => x.name.Equals(j["name"].ToString())).First().count;
-                                result.RemoveAll(x => x.name.Equals(j["name"].ToString()));
-                                temp = new Aggregate { name = j["name"].ToString(), count = currentVal + 1 };
-                            }
-                            result.Add(temp);
-                        }
-                    }
-                }
-                catch
-                {
-                    //Ignore error ※item doesn't have "ctegories" element
-                }
-            }
-            return result;
-        }
-        #endregion
+        //                if ((float)(j["score"]) > 0.5)
+        //                {
+        //                    var temp = new Aggregate();
+        //                    if (!(result.Select(x => x.name).ToList().Contains(j["name"].ToString())))
+        //                    {
+        //                        temp = new Aggregate { name = j["name"].ToString(), count = 1 };
+        //                    }
+        //                    else
+        //                    {
+        //                        var currentVal = result.Where(x => x.name.Equals(j["name"].ToString())).First().count;
+        //                        result.RemoveAll(x => x.name.Equals(j["name"].ToString()));
+        //                        temp = new Aggregate { name = j["name"].ToString(), count = currentVal + 1 };
+        //                    }
+        //                    result.Add(temp);
+        //                }
+        //            }
+        //        }
+        //        catch
+        //        {
+        //            //Ignore error ※item doesn't have "ctegories" element
+        //        }
+        //    }
+        //    return result;
+        //}
+        //#endregion
 
         //#region private 【JSONデータ集計】        
         //private List<Aggregate> AggregateData(JObject temp)
@@ -342,10 +344,14 @@ namespace cognitive_test.Controllers
         //        {
         //            //Ignore error ※item doesn't have "ctegories" element
         //        }
-            
+
         //    return result;
         //}
         //#endregion
+
+        #endregion
+
+
 
     }
 
